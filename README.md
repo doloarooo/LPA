@@ -1,4 +1,6 @@
 # LPA
+[index.html](https://github.com/user-attachments/files/29948939/index.html)
+
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>多治見店 商圏比較 2024→2026</title>
