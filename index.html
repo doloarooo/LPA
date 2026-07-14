@@ -94,9 +94,9 @@ var codeName={}; P.geoms.forEach(function(g){codeName[g.code]=g.name;});
 var areaEls=[].slice.call(document.querySelectorAll('.area'));
 
 function volColor(v){v=+v;if(v<=0)return'#edf0f3';if(v<50)return'#ffffcc';if(v<150)return'#fed976';if(v<400)return'#fd8d3c';if(v<800)return'#f03b20';return'#800026';}
-function diffColor(d){if(d===0)return'#eef0f2';var a=Math.abs(d);
- if(d<0){if(a>=400)return'#b2182b';if(a>=150)return'#ef8a62';if(a>=40)return'#fddbc7';return'#f6efe9';}
- if(a>=400)return'#1a9850';if(a>=150)return'#91cf60';if(a>=40)return'#d9ef8b';return'#eef6e6';}
+function diffColor(d){var a=Math.abs(d);
+ if(d<0){if(a>=400)return'#d73027';if(a>=150)return'#fc8d59';if(a>=40)return'#fee08b';return'#ffffbf';}
+ if(a>=400)return'#1a9850';if(a>=150)return'#91cf60';if(a>=40)return'#d9ef8b';return'#ffffbf';}
 
 var PAN=false,tx=0,ty=0,scl=0.5;var tip=document.getElementById('tip');
 function tshow(h,e){if(PAN)return;tip.innerHTML=h;tip.style.display='block';var x=(e.touches?e.touches[0].clientX:e.clientX),y=(e.touches?e.touches[0].clientY:e.clientY);tip.style.left=Math.min(x+12,window.innerWidth-180)+'px';tip.style.top=(y+12)+'px';}
@@ -162,7 +162,7 @@ function renderDiff(){
  areaEls.forEach(function(el){var g=P.geoms[+el.getAttribute('data-i')];
    if(!have){el.setAttribute('fill','#e4e9ee');el.setAttribute('fill-opacity',0.85);return;}
    var va=(sd.years[a]||{})[g.code]||0,vb=(sd.years[b]||{})[g.code]||0;
-   el.setAttribute('fill',diffColor(vb-va));el.setAttribute('fill-opacity',0.9);});
+   el.setAttribute('fill',(va===0&&vb===0)?'#e2e8ee':diffColor(vb-va));el.setAttribute('fill-opacity',0.9);});
  var cl='';if(have){var arr=P.geoms.map(function(g){var va=(sd.years[a]||{})[g.code]||0,vb=(sd.years[b]||{})[g.code]||0;return{g:g,d:vb-va};}).sort(function(x,y){return Math.abs(y.d)-Math.abs(x.d);}).slice(0,10);
    arr.forEach(function(o){if(Math.abs(o.d)>=250)cl+='<text class="lbl" x="'+o.g.cx+'" y="'+o.g.cy+'">'+o.g.name+'</text>';});}
  document.getElementById('citylabels').innerHTML=cl;
@@ -183,7 +183,7 @@ function legendVol(){var b=[['#800026','800人以上'],['#f03b20','400-799'],['#
  var h='<div class="hd">来訪者数（人）</div>';b.forEach(function(x){h+='<span class="it"><span class="sw" style="background:'+x[0]+'"></span>'+x[1]+'</span>';});
  h+='<span class="it"><span class="sw" style="background:#00c2d1;border-radius:50%"></span>分析対象店</span><span class="it"><span class="sw" style="background:#334;border-radius:50%"></span>既存店</span><span class="it"><span class="sw" style="background:#d7191c;border-radius:50%"></span>この年の新店</span>';
  document.getElementById('legend').innerHTML=h;}
-function legendDiff(){var b=[['#1a9850','+400以上'],['#91cf60','+150〜+399'],['#d9ef8b','+40〜+149'],['#eef0f2','ほぼ増減なし'],['#fddbc7','-40〜-149'],['#ef8a62','-150〜-399'],['#b2182b','-400以下']];
+function legendDiff(){var b=[['#1a9850','+400以上'],['#91cf60','+150〜+399'],['#d9ef8b','+40〜+149'],['#ffffbf','ほぼ増減なし(±40)'],['#fee08b','-40〜-149'],['#fc8d59','-150〜-399'],['#d73027','-400以下'],['#e2e8ee','圏外・来訪なし']];
  var h='<div class="hd">来訪者数の増減（人）</div>';b.forEach(function(x){h+='<span class="it"><span class="sw" style="background:'+x[0]+'"></span>'+x[1]+'</span>';});
  h+='<span class="it"><span class="sw" style="background:#00c2d1;border-radius:50%"></span>分析対象店</span>';
  document.getElementById('legend').innerHTML=h;}
